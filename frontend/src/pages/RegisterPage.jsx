@@ -5,6 +5,40 @@ export const RegisterPage = () => {
   // TODO: Implementar useForm para el manejo del formulario
   // TODO: Implementar función handleSubmit
 
+  // Importar useForm
+  const { values, handleChange, reset } = require('../hooks/useForm')({
+    username: '',
+    email: '',
+    password: '',
+    name: '',
+    lastname: ''
+  });
+
+  // Estado para error
+  const [error, setError] = require('react').useState(false);
+
+  // funcion para manejar el submit en el register
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError(false); ""
+    try {
+      // Lógica de registro: enviar datos al backend
+      const response = await fetch('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values)
+      });
+      if (!response.ok) throw new Error('Error en el registro');
+      // Si todo sale bien, limpiar el formulario
+      reset();
+      // Redirigir o mostrar éxito (puedes agregar lógica aquí)
+    } catch (err) {
+      setError(true);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
       <div className="max-w-lg w-full bg-white rounded-lg shadow-xl p-8">
@@ -13,13 +47,15 @@ export const RegisterPage = () => {
         </h2>
 
         {/* TODO: Mostrar este div cuando haya error */}
-        <div className="hidden bg-red-100 text-red-700 p-3 rounded mb-4">
-          <p className="text-sm">
-            Error al crear la cuenta. Intenta nuevamente.
-          </p>
-        </div>
+        {error && (
+          <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+            <p className="text-sm">
+              Error al crear la cuenta. Intenta nuevamente.
+            </p>
+          </div>
+        )}
 
-        <form onSubmit={(event) => {}}>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="username"
@@ -34,6 +70,8 @@ export const RegisterPage = () => {
               placeholder="Elige un nombre de usuario"
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
               required
+              value={values.username}
+              onChange={handleChange}
             />
           </div>
 
@@ -51,6 +89,8 @@ export const RegisterPage = () => {
               placeholder="tu@email.com"
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
               required
+              value={values.email}
+              onChange={handleChange}
             />
           </div>
 
@@ -68,6 +108,8 @@ export const RegisterPage = () => {
               placeholder="Crea una contraseña segura"
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
               required
+              value={values.password}
+              onChange={handleChange}
             />
           </div>
 
@@ -85,6 +127,8 @@ export const RegisterPage = () => {
               placeholder="Tu nombre"
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
               required
+              value={values.name}
+              onChange={handleChange}
             />
           </div>
 
@@ -102,6 +146,8 @@ export const RegisterPage = () => {
               placeholder="Tu apellido"
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
               required
+              value={values.lastname}
+              onChange={handleChange}
             />
           </div>
 
