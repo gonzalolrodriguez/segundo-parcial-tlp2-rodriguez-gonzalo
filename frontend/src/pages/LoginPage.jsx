@@ -1,39 +1,38 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import useForm from "../hooks/useForm";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
-  // TODO: Integrar lógica de autenticación aquí
-  // TODO: Implementar useForm para el manejo del formulario
-  // TODO: Implementar función handleSubmit
+  const { formState, handleChange } = useForm({ username: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // TODO: Integrar lógica de autenticación aquí
-  const { values, handleChange } = useForm({
-    username: "",
-    password: "",
-  });
-  const [error, setError] = useState(false);
-
-  // TODO: Implementar función handleSubmit
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (!formState.username || !formState.password) {
+      setError("Completa todos los campos");
+      return;
+    }
+    setLoading(true);
     try {
-      // Lógica de autenticación: enviar datos al backend
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const res = await fetch("http://localhost:3000/api/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(formState),
       });
-      if (!response.ok) throw new Error("Credenciales incorrectas");
-      // Si todo sale bien, puedes guardar el token y redirigir
-      // const data = await response.json();
-      // localStorage.setItem('token', data.token);
-      // Redirigir a la página principal
-    } catch {
-      setError(true);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || "Credenciales incorrectas. Intenta nuevamente.");
+      }
+      navigate("/home");
+    } catch (err) {
+      setError(err.message || "Credenciales incorrectas. Intenta nuevamente.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,7 +47,7 @@ export const LoginPage = () => {
         {/* TODO: Mostrar este div cuando haya error */}
         {error && (
           <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
-            <p className="text-sm">Credenciales incorrectas. Intenta nuevamente.</p>
+            <p className="text-sm">{error}</p>
           </div>
         )}
 
@@ -67,8 +66,9 @@ export const LoginPage = () => {
               placeholder="Ingresa tu usuario"
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
-              value={values.username}
+              value={formState.username}
               onChange={handleChange}
+              disabled={loading}
             />
           </div>
 
@@ -86,16 +86,18 @@ export const LoginPage = () => {
               placeholder="Ingresa tu contraseña"
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
-              value={values.password}
+              value={formState.password}
               onChange={handleChange}
+              disabled={loading}
             />
           </div>
 
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded transition-colors"
+            disabled={loading}
           >
-            Ingresar
+            {loading ? "Ingresando..." : "Ingresar"}
           </button>
         </form>
 
