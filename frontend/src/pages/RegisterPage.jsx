@@ -1,8 +1,13 @@
+// Página de registro de nuevos usuarios
 import { Link, useNavigate } from "react-router-dom";
+// Importa React y hooks necesarios
 import React, { useState } from 'react';
+// Hook personalizado para manejar el formulario
 import useForm from '../hooks/useForm';
 
+// Componente principal de RegisterPage
 export const RegisterPage = () => {
+  // Estado y lógica para el formulario de registro
   // TODO: Integrar lógica de registro aquí
   // TODO: Implementar useForm para el manejo del formulario
   // TODO: Implementar función handleSubmit
@@ -17,6 +22,7 @@ export const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Maneja el envío del formulario de registro
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -45,6 +51,7 @@ export const RegisterPage = () => {
     }
   };
 
+  // Renderiza el formulario y la interfaz de registro
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
       <div className="max-w-lg w-full bg-white rounded-lg shadow-xl p-8">

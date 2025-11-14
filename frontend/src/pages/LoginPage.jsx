@@ -9,6 +9,7 @@ export const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Maneja el envío del formulario de login
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -36,6 +37,7 @@ export const LoginPage = () => {
     }
   };
 
+  // Renderiza el formulario y la interfaz de login
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
       <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8">

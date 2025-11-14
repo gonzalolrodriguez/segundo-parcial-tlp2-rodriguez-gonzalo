@@ -1,15 +1,15 @@
-
 import React, { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 
 export const HomePage = () => {
+  // Estado y lógica para usuario, superhéroes y carga
   const [user, setUser] = useState(null);
   const [superheroes, setSuperheroes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [reloadLoading, setReloadLoading] = useState(false);
-  // ...existing code...
 
+  // para cargar datos de usuario y superhéroes al montar
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -36,6 +36,7 @@ export const HomePage = () => {
     fetchData();
   }, []);
 
+  // Función para recargar la lista de superhéroes
   const handleReload = async () => {
     setReloadLoading(true);
     setError("");
@@ -55,6 +56,7 @@ export const HomePage = () => {
 
   if (loading) return <Loading />;
 
+  // Renderiza la página principal con saludo y lista de superhéroes
   return (
     <div className="container mx-auto px-4 pb-8">
       <h1 className="text-4xl font-bold text-center mt-8 mb-4 text-gray-800">

@@ -20,7 +20,7 @@ export const Navbar = () => {
           return;
         }
         const data = await res.json();
-        // Si la respuesta tiene 'user', tomar el nombre desde ahí
+
         if (data.user) {
           setUserName(data.user.name || data.user.username || data.user.email || "");
         } else {
