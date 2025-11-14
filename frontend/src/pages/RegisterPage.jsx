@@ -1,12 +1,14 @@
 import { Link } from "react-router";
+import React, { useState } from 'react';
+import useForm from '../hooks/useForm';
 
 export const RegisterPage = () => {
   // TODO: Integrar lógica de registro aquí
   // TODO: Implementar useForm para el manejo del formulario
   // TODO: Implementar función handleSubmit
 
-  // Importar useForm
-  const { values, handleChange, reset } = require('../hooks/useForm')({
+  // TODO: Integrar lógica de registro aquí
+  const { values, handleChange, reset } = useForm({
     username: '',
     email: '',
     password: '',
@@ -15,12 +17,12 @@ export const RegisterPage = () => {
   });
 
   // Estado para error
-  const [error, setError] = require('react').useState(false);
+  const [error, setError] = useState(false);
 
-  // funcion para manejar el submit en el register
+  // TODO: Implementar función handleSubmit
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(false); ""
+    setError(false);
     try {
       // Lógica de registro: enviar datos al backend
       const response = await fetch('http://localhost:3000/api/auth/register', {

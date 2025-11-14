@@ -1,9 +1,41 @@
 import { Link } from "react-router";
+import React, { useState } from "react";
+import useForm from "../hooks/useForm";
 
 export const LoginPage = () => {
   // TODO: Integrar lógica de autenticación aquí
   // TODO: Implementar useForm para el manejo del formulario
   // TODO: Implementar función handleSubmit
+
+  // TODO: Integrar lógica de autenticación aquí
+  const { values, handleChange } = useForm({
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState(false);
+
+  // TODO: Implementar función handleSubmit
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError(false);
+    try {
+      // Lógica de autenticación: enviar datos al backend
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      if (!response.ok) throw new Error("Credenciales incorrectas");
+      // Si todo sale bien, puedes guardar el token y redirigir
+      // const data = await response.json();
+      // localStorage.setItem('token', data.token);
+      // Redirigir a la página principal
+    } catch {
+      setError(true);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
@@ -14,13 +46,13 @@ export const LoginPage = () => {
         </h2>
 
         {/* TODO: Mostrar este div cuando haya error */}
-        <div className="hidden bg-red-100 text-red-700 p-3 rounded mb-4">
-          <p className="text-sm">
-            Credenciales incorrectas. Intenta nuevamente.
-          </p>
-        </div>
+        {error && (
+          <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+            <p className="text-sm">Credenciales incorrectas. Intenta nuevamente.</p>
+          </div>
+        )}
 
-        <form onSubmit={(event) => {}}>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="username"
@@ -35,6 +67,8 @@ export const LoginPage = () => {
               placeholder="Ingresa tu usuario"
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+              value={values.username}
+              onChange={handleChange}
             />
           </div>
 
@@ -52,6 +86,8 @@ export const LoginPage = () => {
               placeholder="Ingresa tu contraseña"
               className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+              value={values.password}
+              onChange={handleChange}
             />
           </div>
 
